@@ -74,6 +74,13 @@ export class Renderer {
     ctx.drawImage(this.ceu, 0, 0, LARGURA, ALTURA);
     this.desenharEstrelas(tempo);
     ctx.drawImage(this.cenario, 0, 0, LARGURA, ALTURA);
+    ctx.restore();
+
+    // HUD fica por baixo das palavras: uma palavra nascendo no topo nunca é escondida.
+    if (jogo.estado !== 'menu' && jogo.estado !== 'carregando') this.desenharHud(jogo);
+
+    ctx.save();
+    ctx.translate(tremor.x, tremor.y);
     for (const p of jogo.palavras) this.desenharPalavra(p, p.id === jogo.alvoId);
     this.desenharProjeteis(jogo);
     this.desenharMago(jogo.mago);
@@ -84,7 +91,6 @@ export class Renderer {
       ctx.fillStyle = `rgba(255, 60, 60, ${jogo.efeitos.flash * 0.22})`;
       ctx.fillRect(0, 0, LARGURA, ALTURA);
     }
-    if (jogo.estado !== 'menu' && jogo.estado !== 'carregando') this.desenharHud(jogo);
     if (jogo.estado === 'intro') this.desenharLetreiroDaOnda(jogo);
   }
 
@@ -240,6 +246,13 @@ export class Renderer {
   }
 
   private desenharHud(jogo: Jogo): void {
+    const ctx = this.ctx;
+    const faixa = ctx.createLinearGradient(0, 0, 0, 46);
+    faixa.addColorStop(0, 'rgba(9, 6, 22, 0.85)');
+    faixa.addColorStop(1, 'rgba(9, 6, 22, 0)');
+    ctx.fillStyle = faixa;
+    ctx.fillRect(0, 0, LARGURA, 46);
+
     const placar = jogo.placar;
     this.texto(String(placar.pontos), 10, 10, FONTE_TITULO, COR.tinta);
     const mult = placar.multiplicador();
