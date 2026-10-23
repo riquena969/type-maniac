@@ -1,12 +1,19 @@
-// Efeitos sonoros sintetizados na hora (WebAudio), sem arquivos de áudio.
+// Efeitos sonoros e música sintetizados na hora (WebAudio), sem arquivos de áudio.
+import { Trilha, type ModoMusica } from './music';
 
 export type Som = 'magia' | 'acerto' | 'estouro' | 'erro' | 'dano' | 'onda' | 'vida' | 'fim';
 
 export class Sons {
+  /** Efeitos sonoros ligados. */
   ativo = true;
   private ctx: AudioContext | null = null;
   private mestre: GainNode | null = null;
   private ruidoBranco: AudioBuffer | null = null;
+  private trilha: Trilha | null = null;
+  private musicaLigada = true;
+  /** O que deveria estar tocando agora (a trilha só começa depois do primeiro gesto do usuário). */
+  private modoMusica: ModoMusica | null = null;
+  private musicaPausada = false;
 
   /** Precisa ser chamado a partir de um gesto do usuário (clique ou tecla). */
   desbloquear(): void {
@@ -20,11 +27,39 @@ export class Sons {
         this.ruidoBranco = this.ctx.createBuffer(1, n, n);
         const dados = this.ruidoBranco.getChannelData(0);
         for (let i = 0; i < n; i++) dados[i] = Math.random() * 2 - 1;
+        this.trilha = new Trilha(this.ctx, this.mestre, this.ruidoBranco);
       }
       if (this.ctx.state === 'suspended') void this.ctx.resume();
+      this.sincronizarMusica();
     } catch {
       this.ctx = null;
     }
+  }
+
+  definirMusica(ligada: boolean): void {
+    this.musicaLigada = ligada;
+    this.sincronizarMusica();
+  }
+
+  musica(modo: ModoMusica | null): void {
+    this.modoMusica = modo;
+    this.musicaPausada = false;
+    this.sincronizarMusica();
+  }
+
+  pausarMusica(pausada: boolean): void {
+    this.musicaPausada = pausada;
+    this.sincronizarMusica();
+  }
+
+  ritmo(onda: number): void {
+    this.trilha?.ritmo(onda);
+  }
+
+  private sincronizarMusica(): void {
+    if (!this.trilha) return;
+    if (this.musicaLigada && this.modoMusica && !this.musicaPausada) this.trilha.tocar(this.modoMusica);
+    else this.trilha.parar();
   }
 
   tocar(som: Som, variacao = 0): void {

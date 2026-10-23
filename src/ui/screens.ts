@@ -62,6 +62,8 @@ export class Interface {
       case 'opcoes': this.opcoes(); break;
       case 'creditos': this.creditos(); break;
       case 'voltar': this.menu(); break;
+      case 'alternar-musica': this.alternar('musica'); break;
+      case 'alternar-som': this.alternar('som'); break;
     }
   }
 
@@ -107,7 +109,11 @@ export class Interface {
         </label>
         <label class="opcao">
           <input type="checkbox" data-opcao="som" ${marcado(this.config.som)}>
-          <span><strong>Som</strong><small>Efeitos sonoros do mago.</small></span>
+          <span><strong>Efeitos sonoros</strong><small>Magias, estouros, erros e explosões.</small></span>
+        </label>
+        <label class="opcao">
+          <input type="checkbox" data-opcao="musica" ${marcado(this.config.musica)}>
+          <span><strong>Música</strong><small>Trilha chiptune que acelera a cada onda.</small></span>
         </label>
         <label class="opcao">
           <select data-opcao="ondaInicial">
@@ -162,15 +168,26 @@ export class Interface {
       </section>`);
   }
 
-  private pausa(): void {
+  private pausa(focar = 'continuar'): void {
+    const estado = (ligado: boolean) => (ligado ? 'ligada' : 'desligada');
     this.mostrar('pausa', `
       <section class="painel">
         <h2>Pausado</h2>
         <nav class="botoes">
-          <button data-acao="continuar" autofocus>Continuar <kbd>Esc</kbd></button>
+          <button data-acao="continuar">Continuar <kbd>Esc</kbd></button>
+          <button data-acao="alternar-musica">Música: ${estado(this.config.musica)}</button>
+          <button data-acao="alternar-som">Efeitos: ${this.config.som ? 'ligados' : 'desligados'}</button>
           <button data-acao="menu">Sair para o menu</button>
         </nav>
       </section>`);
+    this.raiz.querySelector<HTMLButtonElement>(`button[data-acao="${focar}"]`)?.focus();
+  }
+
+  private alternar(opcao: 'musica' | 'som'): void {
+    this.config = { ...this.config, [opcao]: !this.config[opcao] };
+    salvarConfig(this.config);
+    this.acoes.aoMudarConfig(this.config);
+    this.pausa(`alternar-${opcao}`);
   }
 
   mostrarFim(resumo: ResumoPartida): void {

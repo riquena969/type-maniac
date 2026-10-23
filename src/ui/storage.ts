@@ -11,7 +11,9 @@ export interface Recorde {
 
 export interface Configuracoes {
   ignorarAcentos: boolean;
+  /** Efeitos sonoros. */
   som: boolean;
+  musica: boolean;
   /** Último nome usado no placar. */
   nome: string;
   /** Onda em que a partida começa (quem já digita rápido pula o aquecimento). */
@@ -25,7 +27,7 @@ type Armazem = Pick<Storage, 'getItem' | 'setItem'>;
 const CHAVE_RECORDES = 'type-maniac:recordes:v1';
 const CHAVE_CONFIG = 'type-maniac:config:v1';
 export const TOP = 10;
-export const CONFIG_PADRAO: Configuracoes = { ignorarAcentos: false, som: true, nome: '', ondaInicial: 1 };
+export const CONFIG_PADRAO: Configuracoes = { ignorarAcentos: false, som: true, musica: true, nome: '', ondaInicial: 1 };
 
 function armazemPadrao(): Armazem | null {
   try {

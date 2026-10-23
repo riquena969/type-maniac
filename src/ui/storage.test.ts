@@ -44,7 +44,8 @@ describe('configurações', () => {
   it('usa o padrão e mescla o que foi salvo', () => {
     const armazem = memoria();
     expect(lerConfig(armazem)).toEqual(CONFIG_PADRAO);
-    salvarConfig({ ignorarAcentos: true, som: false, nome: 'Ana', ondaInicial: 5 }, armazem);
-    expect(lerConfig(armazem)).toEqual({ ignorarAcentos: true, som: false, nome: 'Ana', ondaInicial: 5 });
+    const config = { ignorarAcentos: true, som: false, musica: false, nome: 'Ana', ondaInicial: 5 };
+    salvarConfig(config, armazem);
+    expect(lerConfig(armazem)).toEqual(config);
   });
 });

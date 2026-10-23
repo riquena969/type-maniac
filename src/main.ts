@@ -19,6 +19,15 @@ async function iniciar(): Promise<void> {
   const config = lerConfig();
   const sons = new Sons();
   sons.ativo = config.som;
+  sons.definirMusica(config.musica);
+  // Navegadores só liberam áudio depois de um gesto do usuário.
+  const liberarAudio = () => {
+    sons.desbloquear();
+    window.removeEventListener('pointerdown', liberarAudio);
+    window.removeEventListener('keydown', liberarAudio);
+  };
+  window.addEventListener('pointerdown', liberarAudio);
+  window.addEventListener('keydown', liberarAudio);
 
   let jogo: Jogo | undefined;
   const ui = new Interface(raizUi, {
@@ -27,6 +36,7 @@ async function iniciar(): Promise<void> {
     menu: () => jogo?.irParaMenu(),
     aoMudarConfig: (c) => {
       sons.ativo = c.som;
+      sons.definirMusica(c.musica);
       if (jogo) jogo.opcoes = c;
     },
   }, config);
@@ -48,7 +58,12 @@ async function iniciar(): Promise<void> {
     });
     window.addEventListener('blur', () => j.pausar());
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) j.pausar();
+      if (document.hidden) {
+        j.pausar();
+        sons.pausarMusica(true);
+      } else if (j.estado !== 'pausado') {
+        sons.pausarMusica(false);
+      }
     });
 
     if (import.meta.env.DEV) Object.assign(window, { __typeManiac: j });

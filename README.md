@@ -13,7 +13,7 @@ Jogo de digitação em português. Palavras caem do céu; um mago em pixel art l
 - Onda sem perder vida dá bônus.
 - No fim, o jogo mostra seus PPM (palavras por minuto), a precisão e as **letras que você mais errou**, para saber o que treinar.
 
-Em **Opções** dá para ignorar acentos (para teclados sem acento), desligar o som e começar numa onda mais alta.
+Em **Opções** dá para ignorar acentos (para teclados sem acento), ligar ou desligar a música e os efeitos sonoros, e começar numa onda mais alta. A música e os efeitos também podem ser trocados na pausa.
 
 ## Como a dificuldade sobe
 
@@ -54,7 +54,7 @@ npm test         # testes (Vitest), incluindo simulações de partidas com robô
 npm run build    # gera dist/
 ```
 
-Stack: TypeScript, Vite e Canvas 2D, sem engine. Sprites e cenário são desenhados por código e os sons são sintetizados com WebAudio. Todo push na `main` publica no GitHub Pages pelo workflow `.github/workflows/deploy.yml`.
+Stack: TypeScript, Vite e Canvas 2D, sem engine. Sprites e cenário são desenhados por código. Efeitos sonoros e música são sintetizados com WebAudio: a trilha chiptune em lá menor acelera de 100 para 150 BPM conforme as ondas. Todo push na `main` publica no GitHub Pages pelo workflow `.github/workflows/deploy.yml`.
 
 ## Créditos e licenças
 

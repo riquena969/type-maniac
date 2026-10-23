@@ -65,11 +65,13 @@ export class Jogo {
 
   irParaMenu(): void {
     this.limparTela();
+    this.sons.musica('menu');
     this.mudarEstado('menu');
   }
 
   novaPartida(): void {
     this.sons.desbloquear();
+    this.sons.musica('jogo');
     this.limparTela();
     this.placar = new Placar();
     this.vidas = VIDAS_MAX;
@@ -79,11 +81,13 @@ export class Jogo {
   pausar(): void {
     if (this.estado !== 'jogando' && this.estado !== 'intro') return;
     this.estadoAntesDaPausa = this.estado;
+    this.sons.pausarMusica(true);
     this.mudarEstado('pausado');
   }
 
   continuar(): void {
     if (this.estado !== 'pausado') return;
+    this.sons.pausarMusica(false);
     this.mudarEstado(this.estadoAntesDaPausa);
   }
 
@@ -177,6 +181,7 @@ export class Jogo {
     this.proximoGrupo = 0.4;
     this.danoNaOnda = false;
     this.tempoIntro = DURACAO_INTRO;
+    this.sons.ritmo(onda);
     if (onda > 1 && (onda - 1) % ONDAS_POR_VIDA_EXTRA === 0 && this.vidas < VIDAS_MAX) {
       this.vidas++;
       this.efeitos.texto(LARGURA / 2, 190, '+1 VIDA', '#ff5d8f', true);
@@ -199,6 +204,7 @@ export class Jogo {
     this.projeteis = [];
     this.alvoId = null;
     this.esperaFim = ESPERA_FIM;
+    this.sons.musica(null);
     this.sons.tocar('fim');
     this.mudarEstado('fim');
   }

@@ -6,7 +6,7 @@ import { WordBank } from '../words/WordBank';
 import { Jogo, type EstadoJogo, type ResumoPartida } from './Game';
 
 const palavras = (JSON.parse(readFileSync('public/words/pt-br.json', 'utf8')) as { palavras: string[] }).palavras;
-const sonsMudos = { desbloquear() {}, tocar() {} } as unknown as Sons;
+const sonsMudos = new Proxy({}, { get: () => () => {} }) as Sons;
 const medir = (texto: string) => {
   const letras = [...texto];
   return { deslocamentos: letras.map((_, i) => i * 9), larguras: letras.map(() => 9), largura: letras.length * 9 };
