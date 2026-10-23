@@ -32,6 +32,15 @@ export class Interface {
         this.menu();
       }
     });
+    // Enter começa a partida mesmo se o foco saiu do botão (ex.: clique no fundo).
+    window.addEventListener('keydown', (e) => {
+      const alvo = e.target as HTMLElement;
+      if (e.key !== 'Enter' || alvo.closest('button, input, select, a')) return;
+      if (this.tela === 'menu' || this.tela === 'fim') {
+        e.preventDefault();
+        this.acoes.jogar();
+      }
+    });
   }
 
   aoMudarEstado(estado: EstadoJogo): void {
