@@ -1,0 +1,16 @@
+pt-br.json — lista de palavras do Type Maniac
+
+Licença: Creative Commons Atribuição-CompartilhaIgual 4.0 Internacional (CC BY-SA 4.0)
+https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br
+
+Derivado de:
+- FrequencyWords, © Hermit Dave — lista pt_br_50k (OpenSubtitles 2018), CC BY-SA 4.0
+  https://github.com/hermitdave/FrequencyWords
+
+Filtrado com:
+- Dicionário VERO pt_BR (LibreOffice), distribuído por pythonprobr/palavras, MPL-2.0
+  https://github.com/pythonprobr/palavras
+
+Modificações: filtragem (dicionário, tamanho, palavras bloqueadas, estrangeirismos)
+e reordenação pela dificuldade estimada de digitação no teclado ABNT2.
+Gerado por scripts/build-words.ts.
